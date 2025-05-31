@@ -8,13 +8,13 @@ import requests
 import json
 import pandas as pd
 
-API_key = ''
+API_key = 'removed9'
 
 #Read in data
-df = pd.read_csv(r'\watched.csv')
+df = pd.read_csv(r'watched.csv')
 
 #For Update Run: Change date to last script execution 
-df = df[(df['Date'] > '2023-11-17')]
+df = df[(df['Date'] > '2025-05-01')]
 
 
 #Drop Letterboxd URI 
@@ -36,6 +36,7 @@ df['tagline'] = 'blank'
 for i in range (0,len(df)):
     title=format(df.iloc[i,1])
     query = 'https://api.themoviedb.org/3/search/movie?api_key='+API_key+'&query='+title+''
+    print(query)
     response =  requests.get(query)
     if response.status_code==200: 
         json_format = json.loads(response.text)
@@ -55,6 +56,7 @@ for i in range (0,len(df)):
 for i in range (0,len(df)):
     title=format(df.iloc[i,3])
     query = 'https://api.themoviedb.org/3/movie/'+title+'?api_key='+API_key+''
+    print(query)
     if df.iloc[i,3] != '000000':
        response =  requests.get(query)
        if response.status_code==200: 
@@ -71,12 +73,12 @@ for i in range (0,len(df)):
 print(df)
 
 #Write to CSV
-#df.to_csv(r'\lb_tmdb.csv',header=True, index = False)
+df.to_csv(r'lb_tmdb.csv',header=True, index = False)
 
-#For Update Run:
-df.to_csv(r'\lb_tmdb_newentries.csv',header=True, index = False)
-df_prev = pd.read_csv(r'\lb_tmdb.csv')
-api_results = pd.concat([df_prev,df],ignore_index=True)
-api_results.sort_values(by='Date',inplace=True)
-api_results.to_csv(r'\lb_tmdb.csv',header=True, index = False)
+# #For Update Run:
+# df.to_csv(r'\lb_tmdb_newentries.csv',header=True, index = False)
+# df_prev = pd.read_csv(r'\lb_tmdb.csv')
+# api_results = pd.concat([df_prev,df],ignore_index=True)
+# api_results.sort_values(by='Date',inplace=True)
+# api_results.to_csv(r'\lb_tmdb.csv',header=True, index = False)
 
